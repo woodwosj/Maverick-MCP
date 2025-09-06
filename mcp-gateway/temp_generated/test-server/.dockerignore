@@ -1,1 +1,0 @@
-.git\n.gitignore\nREADME.md\n*.md\n.env*\ntests/\ntest/\n__pycache__/\n*.pyc\n.pytest_cache/\nnode_modules/\n.npm/\ncoverage/\n.coverage

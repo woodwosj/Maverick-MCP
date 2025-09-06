@@ -178,13 +178,23 @@ class MCPGateway:
             return tools
         
         @self.mcp.tool
-        async def execute_tool(server_id: str, tool_name: str, arguments: Optional[dict] = None) -> Any:
+        async def execute_tool(server_id: str, tool_name: str, arguments: Optional[Any] = None) -> Any:
             """Execute a tool on a specific MCP server"""
             
             if server_id not in self.server_registry:
                 raise ValueError(f"Server {server_id} not found in registry")
             
             config = self.server_registry[server_id]
+            
+            # Handle arguments - could be dict, string, or None
+            if arguments is not None:
+                if isinstance(arguments, str):
+                    try:
+                        arguments = json.loads(arguments)
+                    except json.JSONDecodeError:
+                        raise ValueError(f"Invalid JSON in arguments: {arguments}")
+                elif not isinstance(arguments, dict):
+                    raise ValueError(f"Arguments must be dict or JSON string, got {type(arguments)}")
             
             # Get or spawn container
             server_proc = self.bridge.get_or_spawn(server_id, config)

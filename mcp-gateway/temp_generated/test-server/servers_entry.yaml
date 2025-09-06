@@ -1,0 +1,152 @@
+test-server:
+  image: "mcp-test-server"
+  command: ["python", "mcp_server.py"]
+  description: "Auto-generated from test_data"
+  idle_timeout: 300\n  tools:
+    - name: "process_csv_data"
+      description: "Process CSV data and return cleaned results"
+      parameters: {
+      "type": "object",
+      "properties": {
+            "csv_path": {
+                  "type": "string",
+                  "description": "Parameter csv_path"
+            },
+            "clean_nulls": {
+                  "type": "boolean",
+                  "description": "Parameter clean_nulls",
+                  "default": "True"
+            }
+      },
+      "required": [
+            "csv_path"
+      ]
+}
+    - name: "fetch_user_data"
+      description: "Fetch user data from REST API"
+      parameters: {
+      "type": "object",
+      "properties": {
+            "api_url": {
+                  "type": "string",
+                  "description": "Parameter api_url"
+            },
+            "user_id": {
+                  "type": "integer",
+                  "description": "Parameter user_id"
+            },
+            "timeout": {
+                  "type": "integer",
+                  "description": "Parameter timeout",
+                  "default": "30"
+            }
+      },
+      "required": [
+            "api_url",
+            "user_id"
+      ]
+}
+    - name: "validate_email"
+      description: "Validate email address format"
+      parameters: {
+      "type": "object",
+      "properties": {
+            "email": {
+                  "type": "string",
+                  "description": "Parameter email"
+            }
+      },
+      "required": [
+            "email"
+      ]
+}
+    - name: "calculate_compound_interest"
+      description: "Calculate compound interest"
+      parameters: {
+      "type": "object",
+      "properties": {
+            "principal": {
+                  "type": "number",
+                  "description": "Parameter principal"
+            },
+            "rate": {
+                  "type": "number",
+                  "description": "Parameter rate"
+            },
+            "time": {
+                  "type": "number",
+                  "description": "Parameter time"
+            },
+            "n": {
+                  "type": "integer",
+                  "description": "Parameter n",
+                  "default": "1"
+            }
+      },
+      "required": [
+            "principal",
+            "rate",
+            "time"
+      ]
+}
+    - name: "transform_json_data"
+      description: "Transform JSON data to different formats"
+      parameters: {
+      "type": "object",
+      "properties": {
+            "json_data": {
+                  "type": "string",
+                  "description": "Parameter json_data"
+            },
+            "format_type": {
+                  "type": "string",
+                  "description": "Parameter format_type",
+                  "default": "'compact'"
+            }
+      },
+      "required": [
+            "json_data"
+      ]
+}
+    - name: "async_function_example"
+      description: "Async function example for testing async support"
+      parameters: {
+      "type": "object",
+      "properties": {
+            "url": {
+                  "type": "string",
+                  "description": "Parameter url"
+            }
+      },
+      "required": [
+            "url"
+      ]
+}
+    - name: "dangerous_file_operation"
+      description: "This function performs dangerous file operations"
+      parameters: {
+      "type": "object",
+      "properties": {
+            "file_path": {
+                  "type": "string",
+                  "description": "Parameter file_path"
+            }
+      },
+      "required": [
+            "file_path"
+      ]
+}
+    - name: "function_with_complex_types"
+      description: "Function with complex type hints to test type parsing"
+      parameters: {
+      "type": "object",
+      "properties": {
+            "data": {
+                  "type": "string",
+                  "description": "Parameter data"
+            }
+      },
+      "required": [
+            "data"
+      ]
+}

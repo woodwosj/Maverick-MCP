@@ -13,6 +13,7 @@ from typing import Optional
 
 from analyzer.repository_analyzer import RepositoryAnalyzer
 from dockerfile_generator.dockerfile_generator import DockerfileGenerator
+from approval_flow import integrate_approval_step
 
 
 def main():
@@ -25,14 +26,17 @@ Examples:
   # Analyze and generate MCP server from repository
   python generate_docker_server.py /path/to/repo my-server
   
+  # Interactive approval with security review
+  python generate_docker_server.py /path/to/repo my-server --interactive
+  
   # Use existing analysis result
   python generate_docker_server.py --analysis analysis_result.json my-server
   
   # Generate with specific output directory
   python generate_docker_server.py /path/to/repo my-server --output ./generated_servers/
   
-  # Include low-scoring candidates
-  python generate_docker_server.py /path/to/repo my-server --min-score 2.0
+  # Include low-scoring candidates with interactive approval
+  python generate_docker_server.py /path/to/repo my-server --min-score 2.0 --interactive
         """
     )
     
@@ -81,6 +85,12 @@ Examples:
         "--verbose", "-v",
         action="store_true",
         help="Verbose output"
+    )
+    
+    parser.add_argument(
+        "--interactive", "-i",
+        action="store_true",
+        help="Enable interactive approval workflow with security review"
     )
     
     args = parser.parse_args()
@@ -167,6 +177,31 @@ Examples:
             print(f"Using {len(filtered_candidates)} candidates for server generation")
             primary_language = args.language or filtered_candidates[0].function.language
             print(f"Primary language: {primary_language}")
+        
+        # Step 3.5: Interactive approval workflow (if enabled)
+        if args.interactive:
+            server_info = {
+                'name': server_name,
+                'repository': repo_info.get('path', 'Unknown'),
+                'candidates': filtered_candidates
+            }
+            
+            approved, approved_candidates = integrate_approval_step(
+                candidates=filtered_candidates,
+                server_info=server_info,
+                interactive=True,
+                verbose=args.verbose
+            )
+            
+            if not approved:
+                print(f"\nServer conversion cancelled by user.")
+                sys.exit(0)
+            
+            # Use approved candidates for generation
+            filtered_candidates = approved_candidates
+            
+            if args.verbose:
+                print(f"Proceeding with {len(filtered_candidates)} approved candidates")
         
         # Step 4: Generate MCP server package
         generator = DockerfileGenerator()

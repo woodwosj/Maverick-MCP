@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Install dependencies
 RUN npm init -y && \
+    npm pkg set type="module" && \
     npm install @modelcontextprotocol/sdk axios cheerio
 
 # Copy server implementation

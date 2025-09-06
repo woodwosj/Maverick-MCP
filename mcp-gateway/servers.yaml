@@ -4,42 +4,248 @@
 context7:
   image: "mcp-context7"
   command: ["node", "server.js"]
-  description: "Context7 documentation retrieval service"
+  description: "Context7 documentation retrieval service with intelligent caching and multi-source aggregation"
   environment:
     NODE_ENV: "production"
     CONTEXT7_API_KEY: "ctx7sk-6eb6cdfb-9869-47a4-9d9b-4b909142c99e"
   idle_timeout: 300  # 5 minutes
   tools:
     - name: "get_documentation"
-      description: "Fetch up-to-date documentation for programming libraries"
-      when_to_use: "When you need current API documentation, examples, or library information"
+      description: |
+        Fetches comprehensive, up-to-date documentation for programming libraries, frameworks, and APIs directly from authoritative sources.
+        
+        This tool intelligently aggregates documentation from multiple sources including official documentation sites, 
+        npm/PyPI package registries, GitHub repositories, and framework-specific documentation hubs. It extracts the 
+        most relevant sections based on your query and provides well-formatted, easy-to-read documentation with code 
+        examples, parameter descriptions, installation instructions, and usage notes.
+        
+        The tool excels at finding current API references, migration guides between versions, configuration options,
+        and best practice recommendations. It automatically handles version-specific documentation and can focus on 
+        specific topics or functions within larger libraries.
+        
+        Sources include: Official docs, npm/PyPI registries, GitHub READMEs, framework documentation sites,
+        API reference portals, and community-maintained guides.
+      
+      when_to_use: |
+        **Ideal for:**
+        - Learning a new library or framework from scratch
+        - Looking up specific API methods, functions, or classes with exact signatures
+        - Finding official migration guides when upgrading between major versions  
+        - Understanding configuration options, environment variables, and initialization parameters
+        - Researching framework-specific patterns and architectural recommendations
+        - Verifying compatibility requirements between library versions
+        - Getting quick reference for method parameters and return types
+        - Finding installation instructions and setup requirements
+        - Understanding plugin systems and extensibility options
+        - Locating troubleshooting guides and common issue solutions
+        
+        **Not ideal for:**
+        - Finding practical code examples (use search_code_examples instead)
+        - Community discussions or opinions (check Stack Overflow directly)
+        - Private or proprietary library documentation
+        - Highly customized or forked library versions
+      
       parameters:
         type: "object"
         properties:
           library:
             type: "string"
-            description: "Name of the library to get documentation for"
+            description: "Name of the library/framework (e.g., 'react', 'express', 'fastapi', 'django')"
           version:
             type: "string" 
-            description: "Specific version (optional)"
+            description: "Specific version for version-specific docs (e.g., '18.2.0', 'latest'). Omit for current stable version"
           topic:
             type: "string"
-            description: "Specific topic or function to focus on (optional)"
+            description: "Specific topic, function, or concept to focus on (e.g., 'hooks', 'middleware', 'async', 'authentication')"
         required: ["library"]
+      
+      examples:
+        - description: "Get React hooks documentation with practical examples"
+          parameters:
+            library: "react"
+            version: "18.2.0"
+            topic: "hooks"
+          expected_output: |
+            Comprehensive hooks documentation including useState, useEffect, useContext, custom hooks,
+            rules of hooks, performance optimizations, and common patterns. Includes TypeScript definitions.
+        
+        - description: "Find Express.js middleware documentation and patterns"
+          parameters:
+            library: "express"
+            topic: "middleware"
+          expected_output: |
+            Middleware concepts, built-in middleware (body-parser, static, etc.), custom middleware creation,
+            error handling middleware, async middleware patterns, and middleware ordering best practices.
+        
+        - description: "Get FastAPI async capabilities and WebSocket support"
+          parameters:
+            library: "fastapi"
+            topic: "async"
+          expected_output: |
+            Async/await patterns, background tasks, WebSocket endpoints, streaming responses,
+            async database operations, and performance optimization techniques.
+        
+        - description: "Understand Django ORM querying and relationships"
+          parameters:
+            library: "django"
+            version: "4.2"
+            topic: "orm"
+          expected_output: |
+            QuerySet API, model relationships (ForeignKey, ManyToMany), complex queries,
+            database optimization techniques, migrations, and custom managers.
+      
+      best_practices: |
+        - Always specify version for version-specific features or when working with legacy code
+        - Use the topic parameter to narrow down documentation for large frameworks (reduces response time)
+        - Combine results with search_code_examples for practical implementations
+        - Cache frequently accessed documentation locally for faster subsequent lookups
+        - For complex topics, start broad then narrow down with specific topic searches
+        - Cross-reference with official changelog when upgrading versions
+      
+      context_optimization: |
+        **Performance Notes:**
+        - Container starts on first use (~2-3 second initialization)
+        - Remains active for 5 minutes after last request (300s idle timeout)
+        - Popular documentation cached within container for sub-second responses
+        - Subsequent requests within active window are 5-10x faster
+        - Memory usage: ~50MB per active container
+        - Network: Downloads documentation once, serves from cache
+        
+        **Resource Efficiency:**
+        Multiple requests for the same library benefit from shared caching.
+        Container automatically shuts down when idle to conserve resources.
+      
+      related_tools:
+        - "search_code_examples: Find practical, working code implementations and usage patterns"
+        - "mcp-docs: Access MCP protocol and FastMCP framework documentation"
+      
+      limitations: |
+        - Cannot access private, paid, or authentication-required documentation
+        - Some documentation sites may rate-limit or block automated requests
+        - JavaScript-heavy documentation sites may not render completely
+        - Documentation freshness depends on source site update frequency
+        - May miss very new releases not yet indexed by documentation aggregators
     
     - name: "search_code_examples"
-      description: "Search for code examples and usage patterns"
-      when_to_use: "When you need working code examples or usage patterns for a library"
+      description: |
+        Searches for real, working code examples and usage patterns across multiple code repositories and developer communities.
+        
+        This tool aggregates practical code implementations from GitHub repositories, Stack Overflow answers, 
+        official example collections, tutorial sites, and community-maintained code snippets. It focuses on 
+        finding actual working code rather than theoretical documentation, providing copy-paste ready examples
+        with proper context and explanations.
+        
+        The search intelligently filters results by popularity, recency, and code quality. It includes examples
+        for different skill levels (beginner to advanced), various use cases, and common integration patterns.
+        Each result includes source attribution, usage context, and often includes error handling patterns.
+        
+        Sources include: GitHub public repositories, Stack Overflow accepted answers, official example repos,
+        tutorial sites, developer blogs, and curated code collections.
+      
+      when_to_use: |
+        **Perfect for:**
+        - Finding working implementations of specific functionality
+        - Learning common patterns and best practices through real code
+        - Discovering integration patterns between multiple libraries
+        - Finding error handling and edge case implementations
+        - Seeing production-ready code structure and organization
+        - Understanding performance optimization techniques in practice
+        - Finding testing patterns and example test suites
+        - Discovering alternative approaches to common problems
+        - Learning framework-specific patterns and conventions
+        - Finding startup/initialization code and configuration examples
+        
+        **Less suitable for:**
+        - Official API documentation (use get_documentation instead)
+        - Theoretical concepts or architectural guidance
+        - Library installation instructions
+        - Comprehensive feature overviews
+        - Version change logs or migration guides
+      
       parameters:
         type: "object"
         properties:
           library:
             type: "string"
-            description: "Library name"
+            description: "Library/framework name for context (e.g., 'react', 'express', 'django', 'fastapi')"
           query:
             type: "string"
-            description: "Search query for specific functionality"
+            description: "Specific functionality or pattern to search for (e.g., 'authentication', 'file upload', 'websockets', 'testing')"
         required: ["library", "query"]
+      
+      examples:
+        - description: "Find React authentication patterns with hooks"
+          parameters:
+            library: "react"
+            query: "authentication login hooks"
+          expected_output: |
+            Working authentication implementations using useContext, custom hooks for login/logout,
+            JWT token handling, protected routes, and form validation patterns. Includes TypeScript examples.
+        
+        - description: "Search Express.js file upload handling examples"
+          parameters:
+            library: "express"
+            query: "file upload multer validation"
+          expected_output: |
+            Complete file upload implementations with multer, file validation, storage configuration,
+            error handling, progress tracking, and security considerations. Multiple storage backends shown.
+        
+        - description: "Find FastAPI WebSocket chat implementation"
+          parameters:
+            library: "fastapi"
+            query: "websocket chat real-time"
+          expected_output: |
+            Full WebSocket chat server implementations with connection management, message broadcasting,
+            user authentication, room management, and client-side JavaScript integration examples.
+        
+        - description: "Discover Django REST API pagination patterns"
+          parameters:
+            library: "django"
+            query: "rest api pagination filtering"
+          expected_output: |
+            Django REST Framework pagination implementations, custom pagination classes,
+            filtering with django-filter, search functionality, and performance optimization techniques.
+        
+        - description: "Find Node.js testing patterns with Jest"
+          parameters:
+            library: "nodejs"
+            query: "testing jest mocking async"
+          expected_output: |
+            Comprehensive testing setups with Jest, async function testing, API mocking,
+            database testing patterns, integration tests, and CI/CD configurations.
+      
+      best_practices: |
+        - Use specific, descriptive queries for better results ("authentication jwt" vs "auth")
+        - Include implementation details in query ("file upload validation" vs "file upload")
+        - Combine library-specific terms with general concepts for broader examples
+        - Look for examples that include error handling and edge cases
+        - Prefer examples with tests or documentation included
+        - Check example freshness and library version compatibility
+        - Cross-reference multiple examples for different approaches
+      
+      context_optimization: |
+        **Search Performance:**
+        - Initial search may take 3-5 seconds for comprehensive results
+        - Popular queries cached for 15 minutes within active container
+        - Container reuse benefits: cached search indexes improve speed
+        - Multiple related queries benefit from shared context and caching
+        
+        **Result Quality:**
+        - Results ranked by code quality, popularity, and recency
+        - Filters out deprecated patterns and outdated examples
+        - Prioritizes examples with proper error handling
+      
+      related_tools:
+        - "get_documentation: Get official API docs and theoretical guidance"
+        - "mcp-docs: Find MCP-specific implementation patterns and examples"
+      
+      limitations: |
+        - Cannot access private repositories or proprietary code
+        - Code examples may become outdated as libraries evolve
+        - No guarantee that examples follow current best practices
+        - May include experimental or non-production code
+        - Limited access to enterprise or paid platform examples
+        - Results quality varies by library popularity and community size
 
 mcp-docs:
   image: "mcp-docs-server"

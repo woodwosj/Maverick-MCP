@@ -1,0 +1,50 @@
+# Auto-generated Dockerfile for MCP Server: {{ server_name }}
+# Language: {{ language }}
+# Generated: {{ generation_date }}
+# Security Level: {{ security_level }}
+
+FROM {{ base_image }}
+
+WORKDIR /app
+
+# Install system dependencies if needed
+{% if security_level == "high" %}
+# Additional security measures for high-risk functions
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+{% endif %}
+
+# Copy and install Python dependencies
+COPY {{ package_file }} .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r {{ package_file }}
+
+# Copy application files
+COPY {{ server_file }} .
+COPY original_functions.{{ file_extension }} .
+
+# Set Python environment
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+
+{% if environment_vars %}
+# Set environment variables
+{% for key, value in environment_vars.items() %}
+ENV {{ key }}={{ value }}
+{% endfor %}
+{% endif %}
+
+{% if security_level in ["medium", "high"] %}
+# Create non-root user for security
+RUN groupadd -r mcpuser && useradd -r -g mcpuser mcpuser
+RUN chown -R mcpuser:mcpuser /app
+USER mcpuser
+{% endif %}
+
+# Health check (optional for MCP servers)
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD python -c "import {{ server_file.replace('.py', '') }}; print('OK')" || exit 1
+
+# Run the MCP server
+CMD ["python", "{{ server_file }}"]

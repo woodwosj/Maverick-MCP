@@ -1,0 +1,48 @@
+# Auto-generated Dockerfile for MCP Server: {{ server_name }}
+# Language: {{ language }}
+# Generated: {{ generation_date }}
+# Security Level: {{ security_level }}
+
+FROM {{ base_image }}
+
+WORKDIR /app
+
+{% if security_level == "high" %}
+# Additional security measures for high-risk functions
+RUN apk add --no-cache ca-certificates
+{% endif %}
+
+# Initialize npm and set up package.json
+RUN npm init -y && npm pkg set type="module"
+
+# Copy package.json and install dependencies
+COPY {{ package_file }} .
+RUN npm install --production
+
+# Copy application files
+COPY {{ server_file }} .
+COPY original_functions.{{ file_extension }} .
+
+# Set Node.js environment
+ENV NODE_ENV=production
+
+{% if environment_vars %}
+# Set environment variables
+{% for key, value in environment_vars.items() %}
+ENV {{ key }}={{ value }}
+{% endfor %}
+{% endif %}
+
+{% if security_level in ["medium", "high"] %}
+# Create non-root user for security
+RUN adduser -D -s /bin/sh mcpuser
+RUN chown -R mcpuser:mcpuser /app
+USER mcpuser
+{% endif %}
+
+# Health check (optional for MCP servers)
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD node -e "require('./{{ server_file.replace('.js', '') }}'); console.log('OK')" || exit 1
+
+# Run the MCP server
+CMD ["node", "{{ server_file }}"]

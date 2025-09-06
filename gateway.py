@@ -271,9 +271,10 @@ class MCPGateway:
         asyncio.set_event_loop(loop)
         self.idle_monitor_task = loop.create_task(self.idle_monitor())
         
-        # Run FastMCP server (this blocks)
-        logger.info("Starting MCP Gateway on port 8000")
-        self.mcp.run(transport="http", port=8000, host="0.0.0.0")
+        # Run FastMCP server on HTTP (for Docker/systemd integration)
+        # STDIO integration happens through run-gateway.sh bridge
+        logger.info("Starting MCP Gateway on HTTP transport (port 8000)")
+        self.mcp.run(transport="http", host="0.0.0.0", port=8000)
     
     def cleanup(self):
         """Cleanup all running containers"""

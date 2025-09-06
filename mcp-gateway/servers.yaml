@@ -1,0 +1,62 @@
+# MCP Server Registry Configuration
+# Defines available MCP servers and their capabilities
+
+context7:
+  image: "mcp-context7"
+  command: ["node", "server.js"]
+  description: "Context7 documentation retrieval service"
+  environment:
+    NODE_ENV: "production"
+    CONTEXT7_API_KEY: "ctx7sk-6eb6cdfb-9869-47a4-9d9b-4b909142c99e"
+  idle_timeout: 300  # 5 minutes
+  tools:
+    - name: "get_documentation"
+      description: "Fetch up-to-date documentation for programming libraries"
+      when_to_use: "When you need current API documentation, examples, or library information"
+      parameters:
+        type: "object"
+        properties:
+          library:
+            type: "string"
+            description: "Name of the library to get documentation for"
+          version:
+            type: "string" 
+            description: "Specific version (optional)"
+          topic:
+            type: "string"
+            description: "Specific topic or function to focus on (optional)"
+        required: ["library"]
+    
+    - name: "search_code_examples"
+      description: "Search for code examples and usage patterns"
+      when_to_use: "When you need working code examples or usage patterns for a library"
+      parameters:
+        type: "object"
+        properties:
+          library:
+            type: "string"
+            description: "Library name"
+          query:
+            type: "string"
+            description: "Search query for specific functionality"
+        required: ["library", "query"]
+
+# Example of how to add another MCP server
+# weather_server:
+#   image: "mcp-weather"
+#   command: ["python", "-m", "weather_server"]
+#   description: "Weather information service"
+#   environment:
+#     API_KEY: "${WEATHER_API_KEY}"
+#   idle_timeout: 600  # 10 minutes
+#   tools:
+#     - name: "get_current_weather"
+#       description: "Get current weather conditions"
+#       when_to_use: "When you need current weather information for a location"
+#       parameters:
+#         type: "object"
+#         properties:
+#           location:
+#             type: "string"
+#             description: "City name or coordinates"
+#         required: ["location"]

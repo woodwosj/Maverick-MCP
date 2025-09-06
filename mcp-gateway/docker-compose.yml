@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mcp-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcp-gateway
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount Docker socket to allow gateway to spawn containers
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Mount configuration files
+      - ./servers.yaml:/app/servers.yaml:ro
+      # Optional: mount for logs
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    restart: always
+    networks:
+      - mcp-network
+
+  # Pre-built images for MCP servers will be managed dynamically
+  # by the gateway, but you can define them here for reference
+
+networks:
+  mcp-network:
+    driver: bridge
+
+volumes:
+  gateway-logs:
+    driver: local

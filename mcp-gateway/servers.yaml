@@ -41,6 +41,59 @@ context7:
             description: "Search query for specific functionality"
         required: ["library", "query"]
 
+mcp-docs:
+  image: "mcp-docs-server"
+  command: ["python", "mcp_docs_server.py"]
+  description: "MCP and FastMCP documentation server providing protocol reference and guides"
+  environment:
+    LOG_LEVEL: "INFO"
+  idle_timeout: 600  # 10 minutes - keep documentation available longer
+  tools:
+    - name: "search_documentation"
+      description: "Search across all MCP and FastMCP documentation"
+      when_to_use: "When you need to find specific information about MCP protocol, FastMCP framework, or repository analyzer"
+      parameters:
+        type: "object"
+        properties:
+          query:
+            type: "string"
+            description: "Search query terms"
+          category:
+            type: "string"
+            description: "Optional category filter (mcp, fastmcp, analyzer)"
+        required: ["query"]
+    
+    - name: "list_documentation_topics"
+      description: "List all available documentation topics and categories"
+      when_to_use: "When you want to see what documentation is available"
+      parameters:
+        type: "object"
+        properties: {}
+    
+    - name: "get_documentation_index"
+      description: "Get a complete index of all available documentation"
+      when_to_use: "When you need a comprehensive overview of all documentation resources"
+      parameters:
+        type: "object"
+        properties: {}
+  
+  resources:
+    - pattern: "docs://mcp/concepts/**"
+      description: "MCP protocol concept documentation (tools, resources, prompts, protocol)"
+      when_to_use: "For understanding core MCP concepts and protocol details"
+    
+    - pattern: "docs://mcp/guides/**"  
+      description: "MCP protocol guides and tutorials"
+      when_to_use: "For step-by-step guidance on building and using MCP servers"
+    
+    - pattern: "docs://fastmcp/**"
+      description: "FastMCP framework documentation and API reference"
+      when_to_use: "For learning how to use the FastMCP Python framework"
+    
+    - pattern: "docs://analyzer/**"
+      description: "Repository analyzer documentation and scoring guides"
+      when_to_use: "For understanding how the repository analyzer works and conversion processes"
+
 # Example of how to add another MCP server
 # weather_server:
 #   image: "mcp-weather"

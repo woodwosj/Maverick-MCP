@@ -1,0 +1,15 @@
+{
+  "name": "context7-mcp-server",
+  "version": "1.0.0",
+  "description": "Context7 MCP Server - Official implementation",
+  "type": "module",
+  "scripts": {
+    "start": "npx -y @upstash/context7-mcp"
+  },
+  "dependencies": {
+    "@upstash/context7-mcp": "latest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

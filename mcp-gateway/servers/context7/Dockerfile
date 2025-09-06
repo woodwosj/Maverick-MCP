@@ -2,16 +2,18 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Install dependencies
-RUN npm init -y && \
-    npm pkg set type="module" && \
-    npm install @modelcontextprotocol/sdk axios cheerio
+# Copy package.json
+COPY package.json .
 
-# Copy server implementation
-COPY server.js .
+# Install the official Context7 package
+RUN npm install
 
 # Set environment
 ENV NODE_ENV=production
 
-# Run the MCP server
-CMD ["node", "server.js"]
+# Accept API key as build argument and environment variable
+ARG CONTEXT7_API_KEY
+ENV CONTEXT7_API_KEY=${CONTEXT7_API_KEY}
+
+# Run the official Context7 MCP server
+CMD ["npx", "-y", "@upstash/context7-mcp"]

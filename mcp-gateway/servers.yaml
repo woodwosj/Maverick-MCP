@@ -3,13 +3,65 @@
 
 context7:
   image: "mcp-context7"
-  command: ["node", "server.js"]
+  command: ["npx", "-y", "@upstash/context7-mcp"]
   description: "Context7 documentation retrieval service with intelligent caching and multi-source aggregation"
   environment:
     NODE_ENV: "production"
-    CONTEXT7_API_KEY: "ctx7sk-6eb6cdfb-9869-47a4-9d9b-4b909142c99e"
+    CONTEXT7_API_KEY: "${CONTEXT7_API_KEY:-}"  # Optional API key for higher rate limits
   idle_timeout: 300  # 5 minutes
   tools:
+    - name: "resolve-library-id"
+      description: |
+        Resolves a package/product name to a Context7-compatible library ID.
+        Returns a list of matching libraries. You MUST call this function before 'get-library-docs'
+        to obtain a valid Context7-compatible library ID UNLESS the user explicitly provides
+        a library ID in the format '/org/project' or '/org/project/version' in their query.
+      
+      when_to_use: |
+        Always use this first when looking up documentation for any library unless
+        the user provides an exact library ID format like '/react/react' or '/django/django/4.2'
+      
+      parameters:
+        type: "object"
+        properties:
+          query:
+            type: "string"
+            description: "Library name to search for (e.g., 'react', 'express', 'django')"
+        required: ["query"]
+      
+      examples:
+        - description: "Resolve React library ID"
+          parameters:
+            query: "react"
+          expected_output: |
+            List of matching libraries with their Context7 IDs, e.g., '/react/react'
+    
+    - name: "get-library-docs"
+      description: |
+        Fetches up-to-date documentation for a library using its Context7 ID.
+        You must call 'resolve-library-id' first to obtain the exact Context7-compatible
+        library ID required to use this tool, UNLESS the user explicitly provides
+        a library ID in the format '/org/project' or '/org/project/version' in their query.
+      
+      when_to_use: |
+        After resolving the library ID with 'resolve-library-id', use this to fetch
+        the actual documentation content for the library.
+      
+      parameters:
+        type: "object"
+        properties:
+          library:
+            type: "string"
+            description: "Context7 library ID (e.g., '/react/react', '/django/django/4.2')"
+        required: ["library"]
+      
+      examples:
+        - description: "Get React documentation"
+          parameters:
+            library: "/react/react"
+          expected_output: |
+            Complete React documentation including hooks, components, API reference, and examples
+    
     - name: "get_documentation"
       description: |
         Fetches comprehensive, up-to-date documentation for programming libraries, frameworks, and APIs directly from authoritative sources.

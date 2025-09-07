@@ -7,7 +7,6 @@ Turn your existing Python functions into powerful MCP (Model Context Protocol) s
 [![Production Ready](https://img.shields.io/badge/status-production%20ready-brightgreen)](https://github.com/woodwosj/Maverick-MCP)
 [![Docker](https://img.shields.io/badge/docker-containerized-blue)](https://www.docker.com/)
 [![MCP Compatible](https://img.shields.io/badge/MCP-compatible-purple)](https://modelcontextprotocol.io/)
-[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)]()
 
 ---
 
@@ -449,10 +448,6 @@ Maverick MCP stands on the shoulders of giants:
 - **[FastMCP](https://github.com/jlowin/fastmcp)** - The Python framework powering our MCP servers
 - **[Docker](https://www.docker.com/)** - Containerization that makes deployment simple
 - **[Python AST](https://docs.python.org/3/library/ast.html)** - The foundation of our code analysis
-
-## 📄 License
-
-All rights reserved. This software is proprietary and confidential.
 
 ---
 

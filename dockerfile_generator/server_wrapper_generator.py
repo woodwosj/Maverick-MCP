@@ -71,7 +71,7 @@ class ServerWrapperGenerator:
             # Import from the original functions file
             function_imports.append(f"from original_functions import {func_name}")
         
-        imports_section = '\\n'.join(function_imports)
+        imports_section = '\n'.join(function_imports)
         
         # Generate tool definitions
         tool_definitions = []
@@ -104,7 +104,7 @@ class ServerWrapperGenerator:
                         f'{param.name} = arguments.get("{param.name}", {default_val})'
                     )
             
-            param_section = '\\n        '.join(param_extractions)
+            param_section = '\n        '.join(param_extractions)
             param_names = [p.name for p in candidate.function.parameters]
             param_call = ', '.join(param_names)
             
@@ -218,7 +218,7 @@ if __name__ == "__main__":
             func_name = candidate.function.function_name
             function_imports.append(f"import {{ {func_name} }} from './original_functions.js';")
         
-        imports_section = '\\n'.join(function_imports)
+        imports_section = '\n'.join(function_imports)
         
         # Generate tool definitions
         tool_definitions = []
@@ -230,7 +230,7 @@ if __name__ == "__main__":
         }}'''
             tool_definitions.append(tool_def)
         
-        tools_section = ',\\n            '.join(tool_definitions)
+        tools_section = ',\n            '.join(tool_definitions)
         
         # Generate tool handlers
         tool_handlers = []
@@ -251,7 +251,7 @@ if __name__ == "__main__":
                         f'const {param.name} = request.params.arguments?.{param.name} ?? {default_val};'
                     )
             
-            param_section = '\\n        '.join(param_extractions)
+            param_section = '\n        '.join(param_extractions)
             param_names = [p.name for p in candidate.function.parameters]
             param_call = ', '.join(param_names)
             
@@ -282,7 +282,7 @@ if __name__ == "__main__":
             
             tool_handlers.append(handler)
         
-        handlers_section = '\\n    else '.join(tool_handlers)
+        handlers_section = '\n    else '.join(tool_handlers)
         
         return f'''#!/usr/bin/env node
 /**

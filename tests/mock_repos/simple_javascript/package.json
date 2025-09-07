@@ -1,0 +1,22 @@
+{
+  "name": "simple-javascript-mock",
+  "version": "1.0.0",
+  "description": "Mock JavaScript repository for testing Maverick MCP analysis",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "testing",
+    "javascript",
+    "functions"
+  ],
+  "author": "Maverick MCP",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "axios": "^1.6.0"
+  }
+}

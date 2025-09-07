@@ -13,6 +13,7 @@ from .models import (
     FunctionParameter
 )
 from .language_parsers.python_analyzer import PythonAnalyzer
+from .language_parsers.javascript_analyzer import JavaScriptAnalyzer
 from .security.pattern_scanner import SecurityScanner
 
 
@@ -47,7 +48,8 @@ class RepositoryAnalyzer:
     
     def __init__(self):
         self.analyzers = {
-            'python': PythonAnalyzer()
+            'python': PythonAnalyzer(),
+            'javascript': JavaScriptAnalyzer()
         }
         self.security_scanner = SecurityScanner()
     
@@ -334,23 +336,24 @@ class RepositoryAnalyzer:
         return schema
     
     def _python_type_to_json_schema(self, type_hint: Optional[str]) -> str:
-        """Convert Python type hint to JSON schema type"""
+        """Convert type hint to JSON schema type (supports Python and JavaScript types)"""
         if not type_hint:
             return "string"  # Default fallback
         
         type_hint = type_hint.lower()
         
-        if 'str' in type_hint:
+        # Python types
+        if 'str' in type_hint or 'string' in type_hint:
             return "string"
-        elif 'int' in type_hint:
+        elif 'int' in type_hint or 'integer' in type_hint:
             return "integer"
-        elif 'float' in type_hint:
+        elif 'float' in type_hint or 'number' in type_hint:
             return "number"
-        elif 'bool' in type_hint:
+        elif 'bool' in type_hint or 'boolean' in type_hint:
             return "boolean"
-        elif 'list' in type_hint or 'sequence' in type_hint:
+        elif 'list' in type_hint or 'sequence' in type_hint or 'array' in type_hint:
             return "array"
-        elif 'dict' in type_hint:
+        elif 'dict' in type_hint or 'object' in type_hint:
             return "object"
         else:
             return "string"  # Safe fallback

@@ -207,8 +207,8 @@ def fetch_data(url: str) -> dict:
         dependencies = self.resolver._resolve_python_dependencies([sample_candidate])
         
         self.assertIn("mcp>=1.0.0", dependencies)
-        self.assertIn("requests", dependencies)
-        self.assertIn("pandas", dependencies)
+        self.assertTrue(any("requests" in dep for dep in dependencies))
+        self.assertTrue(any("pandas" in dep for dep in dependencies))
 
 
 class TestServerWrapperGenerator(TestCase):

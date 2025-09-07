@@ -22,6 +22,7 @@ from analyzer.models import MCPToolCandidate, AnalysisResult
 
 from .dependency_resolver import DependencyResolver
 from .server_wrapper_generator import ServerWrapperGenerator
+from .documentation_generator import DocumentationGenerator
 
 
 class DockerfileGenerator:
@@ -57,6 +58,7 @@ class DockerfileGenerator:
         self.template_dir = Path(template_dir)
         self.dependency_resolver = DependencyResolver()
         self.server_wrapper_generator = ServerWrapperGenerator()
+        self.documentation_generator = DocumentationGenerator()
         
         # Initialize Jinja2 environment if available
         if HAS_JINJA2:
@@ -143,14 +145,34 @@ class DockerfileGenerator:
         dockerignore_path.write_text(dockerignore_content)
         generated_files['dockerignore'] = str(dockerignore_path)
         
-        # Generate README
-        readme_content = self._generate_readme(context)
+        # Generate comprehensive README
+        readme_content = self.documentation_generator.generate_readme(
+            candidates, server_name, repo_info, language
+        )
         readme_path = output_path / "README.md"
         readme_path.write_text(readme_content)
         generated_files['readme'] = str(readme_path)
         
-        # Generate servers.yaml entry
-        servers_entry = self._generate_servers_yaml_entry(context)
+        # Generate integration guide
+        integration_content = self.documentation_generator.generate_integration_guide(
+            server_name, repo_info, candidates
+        )
+        integration_path = output_path / "INTEGRATION.md"
+        integration_path.write_text(integration_content)
+        generated_files['integration'] = str(integration_path)
+        
+        # Generate deployment guide
+        deployment_content = self.documentation_generator.generate_deployment_guide(
+            server_name, candidates
+        )
+        deployment_path = output_path / "DEPLOYMENT.md"
+        deployment_path.write_text(deployment_content)
+        generated_files['deployment'] = str(deployment_path)
+        
+        # Generate enhanced servers.yaml entry
+        servers_entry = self.documentation_generator.generate_servers_yaml_entry(
+            server_name, repo_info, candidates
+        )
         servers_path = output_path / "servers_entry.yaml"
         servers_path.write_text(servers_entry)
         generated_files['servers_entry'] = str(servers_path)

@@ -1,0 +1,5 @@
+# Test repository dependencies - minimal for testing
+# These would be detected by the dependency resolver
+
+# No external dependencies needed for core functionality
+# This tests how the system handles repositories with no external deps

@@ -1,8 +1,6 @@
-# 🚀 Maverick-MCP: Intelligent Repository Conversion Platform
+# MCP Dockerfile Generator
 
-**Transform any codebase into AI-accessible tools with zero manual setup**
-
-Maverick-MCP is a unified MCP (Model Context Protocol) API gateway that automatically converts any repository into containerized MCP servers through intelligent AST analysis, automated Docker containerization, and comprehensive validation.
+**Automatically convert Python codebases into production-ready MCP (Model Context Protocol) servers with comprehensive documentation and security analysis.**
 
 [![Production Ready](https://img.shields.io/badge/status-production%20ready-brightgreen)](https://github.com/loomworks3/maverick-mcp)
 [![Docker](https://img.shields.io/badge/docker-containerized-blue)](https://www.docker.com/)

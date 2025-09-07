@@ -2,6 +2,7 @@
 MCP Server Wrapper Generator
 
 Generates MCP server wrapper code that exposes repository functions as MCP tools.
+Enhanced with comprehensive prompts and resources for better documentation.
 """
 
 import json
@@ -14,9 +15,15 @@ import sys
 sys.path.append(str(Path(__file__).parent.parent))
 from analyzer.models import MCPToolCandidate
 
+# Import prompt and resource generator
+from .prompt_generator import PromptResourceGenerator
+
 
 class ServerWrapperGenerator:
     """Generates MCP server wrapper code for different languages"""
+    
+    def __init__(self):
+        self.prompt_generator = PromptResourceGenerator()
     
     def generate_wrapper(
         self,
@@ -118,6 +125,10 @@ class ServerWrapperGenerator:
         
         handlers_section = '\\n    el'.join(tool_handlers)
         
+        # Generate prompts and resources
+        prompts_section = self.prompt_generator.generate_prompts(candidates, server_name, repo_info)
+        resources_section = self.prompt_generator.generate_resources(candidates, server_name, repo_info)
+        
         return f'''#!/usr/bin/env python3
 """
 Auto-generated MCP Server: {server_name}
@@ -166,6 +177,11 @@ async def handle_call_tool(
             type="text", 
             text=f"Unknown tool: {{name}}"
         )]
+
+# Prompts and Resources for enhanced documentation
+{prompts_section}
+
+{resources_section}
 
 async def main():
     """Main entry point"""

@@ -1,0 +1,377 @@
+{
+  "repository": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python",
+  "analyzed_files": 3,
+  "languages": [
+    "python"
+  ],
+  "candidates": [
+    {
+      "function_name": "deserialize_data",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/risky_operations.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Deserialize pickled data from base64 string.",
+      "parameters": {
+        "pickled_data": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "deserialize_data",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "list_directory_contents",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/risky_operations.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "List contents of a directory with detailed information.",
+      "parameters": {
+        "directory": {
+          "type": "str",
+          "description": null,
+          "default": "'.'",
+          "required": false
+        },
+        "show_hidden": {
+          "type": "bool",
+          "description": null,
+          "default": "False",
+          "required": false
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "list_directory_contents",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "network_request",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/risky_operations.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Make HTTP request to external URL.",
+      "parameters": {
+        "url": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        },
+        "method": {
+          "type": "str",
+          "description": null,
+          "default": "'GET'",
+          "required": false
+        },
+        "headers": {
+          "type": "dict",
+          "description": null,
+          "default": "None",
+          "required": false
+        }
+      },
+      "security_warnings": [
+        "HIGH RISK (network_operations): Found potentially dangerous pattern: urllib\\.request\\."
+      ],
+      "suggested_tool_name": "network_request",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "reverse_string",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/text_utils.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Reverse a string. ",
+      "parameters": {
+        "text": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "reverse_string",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "count_words",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/text_utils.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Count word frequency in text.",
+      "parameters": {
+        "text": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        },
+        "case_sensitive": {
+          "type": "bool",
+          "description": null,
+          "default": "False",
+          "required": false
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "count_words",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "extract_emails",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/text_utils.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Extract email addresses from text using regex.",
+      "parameters": {
+        "text": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "extract_emails",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "generate_hash",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/text_utils.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Generate cryptographic hash of text.",
+      "parameters": {
+        "text": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        },
+        "algorithm": {
+          "type": "str",
+          "description": null,
+          "default": "'sha256'",
+          "required": false
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "generate_hash",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "format_template",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/text_utils.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Format a string template with variables.",
+      "parameters": {
+        "template": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        },
+        "variables": {
+          "type": "dict",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [
+        "MEDIUM RISK (code_generation): Pattern needs review: \\.format\\s*\\("
+      ],
+      "suggested_tool_name": "format_template",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "validate_phone_number",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/text_utils.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Validate phone number format for different countries.",
+      "parameters": {
+        "phone": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        },
+        "country_code": {
+          "type": "str",
+          "description": null,
+          "default": "'US'",
+          "required": false
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "validate_phone_number",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "add_numbers",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/calculator.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Add two numbers together.",
+      "parameters": {
+        "a": {
+          "type": "float",
+          "description": null,
+          "default": null,
+          "required": true
+        },
+        "b": {
+          "type": "float",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "add_numbers",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "calculate_power",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/calculator.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Calculate base raised to the power of exponent.",
+      "parameters": {
+        "base": {
+          "type": "float",
+          "description": null,
+          "default": null,
+          "required": true
+        },
+        "exponent": {
+          "type": "float",
+          "description": null,
+          "default": "2.0",
+          "required": false
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "calculate_power",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "factorial",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/calculator.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Calculate factorial of a non-negative integer.",
+      "parameters": {
+        "n": {
+          "type": "int",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "factorial",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "calculate_circle_area",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/calculator.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Calculate the area of a circle given its radius.",
+      "parameters": {
+        "radius": {
+          "type": "float",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "calculate_circle_area",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "solve_quadratic",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/calculator.py",
+      "language": "python",
+      "mcp_score": 10.0,
+      "description": "Solve quadratic equation ax\u00b2 + bx + c = 0.",
+      "parameters": {
+        "a": {
+          "type": "float",
+          "description": null,
+          "default": null,
+          "required": true
+        },
+        "b": {
+          "type": "float",
+          "description": null,
+          "default": null,
+          "required": true
+        },
+        "c": {
+          "type": "float",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "solve_quadratic",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "read_system_file",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/risky_operations.py",
+      "language": "python",
+      "mcp_score": 9.0,
+      "description": "Read contents of a system file.",
+      "parameters": {
+        "file_path": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [],
+      "suggested_tool_name": "read_system_file",
+      "docker_requirements": []
+    },
+    {
+      "function_name": "execute_command",
+      "file_path": "/home/loomworks3/MCP Library/tests/mock_repos/simple_python/risky_operations.py",
+      "language": "python",
+      "mcp_score": 8.5,
+      "description": "Execute a system command and return output.",
+      "parameters": {
+        "command": {
+          "type": "str",
+          "description": null,
+          "default": null,
+          "required": true
+        }
+      },
+      "security_warnings": [
+        "HIGH RISK (system_commands): Found potentially dangerous pattern: subprocess\\.",
+        "HIGH RISK (system_commands): Found potentially dangerous pattern: shell=True"
+      ],
+      "suggested_tool_name": "execute_command",
+      "docker_requirements": []
+    }
+  ],
+  "security_summary": {
+    "total_functions": 16,
+    "safe_functions": 14,
+    "medium_risk_functions": 1,
+    "high_risk_functions": 1,
+    "total_warnings": 4
+  }
+}
